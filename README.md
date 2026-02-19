@@ -1,85 +1,104 @@
 # spring-initializr-cli
 
-CLI to generate Spring Boot projects from [start.spring.io](https://start.spring.io).
+`spring-initializr-cli` is a production-focused command-line tool for generating Spring Boot projects from [start.spring.io](https://start.spring.io).
 
-## What You Get
+It is designed for both interactive use and automation (CI/scripts), with live metadata, JSON output, resilient networking, and repeatable defaults via presets.
 
-- `new`: create Spring Boot projects (interactive or non-interactive)
-- `list`: list live metadata (versions, types, dependencies)
-- `search`: find dependencies by ID or name
-- `doctor`: check runtime and connectivity
-- JSON output modes for scripting
-- metadata cache + offline fallback
-- retry/backoff and timeout controls
-- optional post-generation hooks (git, README, Docker, GitHub Actions)
-- preset defaults via `.spring-init.toml`
+## Features
+
+- Generate projects with `new` (interactive or non-interactive)
+- Inspect live metadata with `list`
+- Find dependencies quickly with `search`
+- Validate runtime and connectivity with `doctor`
+- JSON output for scripting workflows
+- Metadata cache with stale fallback for offline/unstable network scenarios
+- Retry/backoff and timeout controls
+- Optional post-generation hooks:
+  - initialize Git repository
+  - create README
+  - add Dockerfile and `.dockerignore`
+  - add GitHub Actions workflow
+- Preset configuration support via `.spring-init.toml`
 
 ## Requirements
 
-- Python 3.12+
+- Python `3.12+`
 - Network access to `https://start.spring.io` (unless using cached metadata)
 
-## Install Globally (Use From Anywhere)
+## Installation
 
-Recommended (`pipx`):
+### Global install (recommended)
+
+Use `pipx` to make `spring-init` available system-wide for your user:
 
 ```bash
 pipx install .
 spring-init --help
 ```
 
-Upgrade later:
+Upgrade:
 
 ```bash
 pipx upgrade spring-initializr-cli
 ```
 
-Alternative (`pip --user`):
+If `spring-init` is not found after install:
+
+```bash
+pipx ensurepath
+```
+
+Open a new terminal afterward.
+
+### Alternative install
 
 ```bash
 python3 -m pip install --user .
 ```
 
-Then ensure your user scripts directory is on `PATH`.
+Ensure your user scripts directory is on `PATH`.
 
-## Local Dev Run
-
-```bash
-python3 -m spring_initializr_cli --help
-python3 main.py --help
-```
-
-## Command Examples
+## Quick Start
 
 ```bash
-# list metadata
-spring-init list boot-versions
+# show available commands
+spring-init --help
+
+# list dependency IDs from live metadata
 spring-init list dependencies
 
-# search dependency IDs
-spring-init search jpa
-spring-init search security --limit 10
-
-# create project
-spring-init new --artifact-id demo --group-id com.acme --dependencies web,data-jpa,h2
-
-# interactive mode
-spring-init new --interactive
-
-# dry-run
-spring-init new --artifact-id demo --dependencies web --dry-run --show-url --print-spec text
+# generate a project
+spring-init new \
+  --artifact-id demo \
+  --group-id com.acme \
+  --dependencies web,data-jpa,h2
 ```
 
-## JSON Output For Scripting
+Run the generated app:
 
-`list` JSON:
+```bash
+cd demo
+./mvnw spring-boot:run
+```
+
+Or for Gradle projects:
+
+```bash
+./gradlew bootRun
+```
+
+## JSON Output (Scripting)
+
+### `list` JSON
 
 ```bash
 spring-init list dependencies --format json
 spring-init list types --format json
 ```
 
-`new` JSON spec:
+### `new` spec JSON
+
+Use dry-run mode to emit a normalized generation payload without writing files:
 
 ```bash
 spring-init new \
@@ -90,11 +109,24 @@ spring-init new \
   --print-spec json
 ```
 
+## Command Overview
+
+- `spring-init new`
+  - generate Spring Boot project archives
+  - supports `--interactive`, `--dry-run`, `--show-url`, `--print-spec`
+- `spring-init list <section>`
+  - sections: `boot-versions`, `java-versions`, `types`, `languages`, `packaging`, `dependencies`
+- `spring-init search <query>`
+  - dependency search by ID or name
+- `spring-init doctor`
+  - checks Python version, launcher availability, Git, cache state, and live API reachability
+
 ## Presets (`.spring-init.toml`)
 
-If `.spring-init.toml` exists in current directory, it is loaded automatically. CLI flags override preset values.
+If a `.spring-init.toml` exists in the current directory, it is loaded automatically.  
+CLI arguments always take precedence over preset values.
 
-You can start from `.spring-init.example.toml`.
+Start from `.spring-init.example.toml`.
 
 Example:
 
@@ -125,7 +157,7 @@ spring-init new --preset ./my-team.toml
 
 ## Runtime Controls
 
-Available on `new`, `list`, `search`, `doctor`:
+Available on `new`, `list`, `search`, and `doctor`:
 
 - `--use-cache / --no-use-cache`
 - `--refresh-metadata / --no-refresh-metadata`
@@ -136,7 +168,7 @@ Available on `new`, `list`, `search`, `doctor`:
 
 ## Post-Generation Hooks
 
-Use with `new`:
+`new` supports:
 
 - `--git-init`
 - `--init-readme`
@@ -159,14 +191,14 @@ python3 -m compileall main.py spring_initializr_cli tests
 
 CI workflow: `.github/workflows/ci.yml`
 
-## Project Structure
+## Architecture
 
-- `spring_initializr_cli/client.py`: HTTP, retries, cache, endpoint discovery
-- `spring_initializr_cli/service.py`: spec defaults + validation
-- `spring_initializr_cli/commands.py`: command handlers
-- `spring_initializr_cli/config.py`: preset loading/merging
-- `spring_initializr_cli/hooks.py`: post-generation hooks
-- `spring_initializr_cli/models.py`: project spec model
-- `spring_initializr_cli/cli.py`: parser + command dispatch
-- `spring_initializr_cli/__main__.py`: application entrypoint
+- `spring_initializr_cli/client.py`: HTTP client, retry/backoff, cache, endpoint discovery
+- `spring_initializr_cli/service.py`: project spec defaults and validation
+- `spring_initializr_cli/commands.py`: command handlers (`new`, `list`, `search`, `doctor`)
+- `spring_initializr_cli/config.py`: preset loading and argument merge rules
+- `spring_initializr_cli/hooks.py`: optional post-generation project automation
+- `spring_initializr_cli/models.py`: domain model (`ProjectSpec`)
+- `spring_initializr_cli/cli.py`: parser and command dispatch
+- `spring_initializr_cli/__main__.py`: process entrypoint and top-level error handling
 - `main.py`: compatibility entrypoint
