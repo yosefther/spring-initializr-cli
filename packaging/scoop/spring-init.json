@@ -1,0 +1,15 @@
+{
+  "version": "__VERSION__",
+  "description": "CLI for generating Spring Boot projects from start.spring.io",
+  "homepage": "https://github.com/your-org/spring-initializr-cli",
+  "license": "MIT",
+  "url": "__URL__",
+  "hash": "__SHA256__",
+  "bin": "bin/spring-init.cmd",
+  "checkver": {
+    "github": "https://github.com/your-org/spring-initializr-cli"
+  },
+  "autoupdate": {
+    "url": "https://github.com/your-org/spring-initializr-cli/archive/refs/tags/v$version.zip"
+  }
+}
