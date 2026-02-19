@@ -1,0 +1,26 @@
+[defaults]
+group-id = "com.acme"
+artifact-id = "demo"
+java-version = "21"
+dependencies = ["web", "actuator"]
+use-cache = true
+cache-ttl = 43200
+timeout = 20
+retries = 3
+backoff = 0.75
+
+[new]
+show-url = true
+init-readme = true
+add-docker = true
+add-github-actions = true
+
+[list]
+format = "json"
+
+[search]
+limit = 25
+format = "text"
+
+[doctor]
+format = "text"
