@@ -1,0 +1,19 @@
+# Fill placeholders before publishing.
+PackageIdentifier: YourOrg.SpringInitializrCLI
+PackageVersion: __VERSION__
+PackageName: spring-initializr-cli
+Publisher: YourOrg
+ShortDescription: CLI for generating Spring Boot projects from start.spring.io
+PackageUrl: https://github.com/your-org/spring-initializr-cli
+License: MIT
+Installers:
+  - Architecture: x64
+    InstallerType: zip
+    InstallerUrl: __URL__
+    InstallerSha256: __SHA256__
+    NestedInstallerType: portable
+    NestedInstallerFiles:
+      - RelativeFilePath: bin\spring-init.cmd
+        PortableCommandAlias: spring-init
+ManifestType: singleton
+ManifestVersion: 1.6.0
