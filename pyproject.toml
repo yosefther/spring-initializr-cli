@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spring-initializr-cli"
+version = "0.2.0"
+description = "CLI for generating Spring Boot projects from start.spring.io"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+spring-init = "spring_initializr_cli.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["spring_initializr_cli*"]
