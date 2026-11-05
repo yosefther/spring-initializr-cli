@@ -6,9 +6,6 @@
 
 It is designed for both interactive use and automation (CI/scripts), with live metadata, JSON output, resilient networking, and repeatable defaults via presets.
 
-![demo](docs/demo.gif)
-<!-- TODO(yosef): record GIF -->
-
 ## Features
 
 - Generate projects with `new` (interactive or non-interactive)
