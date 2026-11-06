@@ -1,5 +1,7 @@
 # spring-initializr-cli
 
+[![CI](https://github.com/yosefther/spring-initializr-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/yosefther/spring-initializr-cli/actions/workflows/ci.yml)
+
 `spring-initializr-cli` is a production-focused command-line tool for generating Spring Boot projects from [start.spring.io](https://start.spring.io).
 
 It is designed for both interactive use and automation (CI/scripts), with live metadata, JSON output, resilient networking, and repeatable defaults via presets.
@@ -202,3 +204,7 @@ CI workflow: `.github/workflows/ci.yml`
 - `spring_initializr_cli/cli.py`: parser and command dispatch
 - `spring_initializr_cli/__main__.py`: process entrypoint and top-level error handling
 - `main.py`: compatibility entrypoint
+
+## License
+
+MIT. See [LICENSE](LICENSE).
